@@ -168,7 +168,7 @@ MonoBehaviour:
   movespeed: 9
   maxfallspeed: 12
   maxfallspeedwallriding: 4
-  jumpheight: 8
+  jumpheight: 10
   jumptime: 0
   jumptimemax: 10
   deadcheck: {fileID: 4899138927134606}

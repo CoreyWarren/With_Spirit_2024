@@ -2,18 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+// Sword Mechanics Script
+// This script controls the behavior of the sword entity, including:
+// 1. **Charging Phases (Stage 1 - 4):** The sword goes through different charge levels (low, medium, high power).
+// 2. **Swing States:** Tracks whether the sword is swinging and at what power level.
+// 3. **Player Interaction:**
+//    - Updates the `PlayerController` about the sword's current state (e.g., charging, swinging).
+//    - Custom behaviors, like stalling the player mid-air, can be tied to swing events based on charge level.
+// 4. **Visuals and Effects:** Includes sprite updates, trail rendering, and rotation for the sword.
+// 5. **Audio:** Plays sound effects for charging and swinging based on the stage.
+// 6. **Energy Management:** Reduces player energy when performing high-power actions.
+
+
 public class sword1_1_script : MonoBehaviour {
 
     Player_Stats_Storage playerStats;
 
     //Charge Stages
     private bool stage1, stage2, stage3, stage4;
+    public static int swordStage;
     private bool stage1Faster;
     private bool endSwing;
     //Swings
     private bool swing2, swing3, swing4;
 
-    public float stage2Wait, stage3Wait, stage4Wait;
+    public float stage2Wait = 10f, stage3Wait = 80f, stage4Wait = 0f;
     private float stage2Waiter, stage3Waiter, stage4Waiter;
 
     private SpriteRenderer srr;
@@ -30,7 +44,7 @@ public class sword1_1_script : MonoBehaviour {
     public AudioClip swing3Sound;
 
     //Rotation
-    public float smooth;
+    public float smooth = 12f;
     private float time;
     Transform player;
     public float radius;
@@ -39,9 +53,9 @@ public class sword1_1_script : MonoBehaviour {
     //Energy Cost
     private GameObject playerObject;
     [SerializeField]
-    private int energyCost;
+    private int energyCost = 0;
     [SerializeField]
-    private float deltaSpeed;
+    private float deltaSpeed = 100f;
     private bool energyReduced;
 
     //Scale
@@ -58,13 +72,13 @@ public class sword1_1_script : MonoBehaviour {
     [SerializeField]
     private GameObject trail;
     [SerializeField]
-    private float trailPeriod, trailFadeTime, trailOpacityPercent;
+    private float trailPeriod = 0.03f, trailFadeTime = 3f, trailOpacityPercent = 30f;
     private float trailTimer;
 
     private TrailRenderer myTRR;
 
     [SerializeField]
-    private float trailWidthMultiplier1, trailWidthMultiplier2, trailWidthMultiplier3;
+    private float trailWidthMultiplier1 = 0.7f, trailWidthMultiplier2 = 1.5f, trailWidthMultiplier3 = 2f;
 
     
 
@@ -120,8 +134,7 @@ public class sword1_1_script : MonoBehaviour {
 	void Update () {
         if (pauser1.paused == false)
         {
-            
-
+           
             ////STAGE 1////
             ////STAGE 1////
             if (stage1 && !stage2)
@@ -504,12 +517,21 @@ public class sword1_1_script : MonoBehaviour {
 
 
 
-
-
-
-
-
-
+            //Global Sword Stage checker:
+            if(stage1)
+            {
+                swordStage = 1;
+            }else if(stage2)
+            {
+                swordStage = 2;
+            }else if(stage3)
+            {
+                swordStage = 3;
+            }else if(stage4)
+            {
+                swordStage = 4;
+            }
+            
 
         } //end of Pauser Check
         else

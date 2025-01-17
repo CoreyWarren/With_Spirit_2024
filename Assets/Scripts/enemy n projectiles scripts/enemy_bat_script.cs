@@ -76,7 +76,7 @@ public class enemy_bat_script : MonoBehaviour
     public float jumpHeight;
     public float jumpHeightMultiplier;
     public float jumpWidth;
-    Animator a;
+    Animator myAnimator;
     private float defaultGravity;
     public float maxXSpeed;
     public float maxYSpeed;
@@ -93,6 +93,7 @@ public class enemy_bat_script : MonoBehaviour
         player = GameObject.FindWithTag("Player").transform;
         playerStats = GameObject.FindWithTag("Event System").GetComponent<Player_Stats_Storage>();
         aso = GetComponent<AudioSource>();
+        myAnimator = GetComponent<Animator>();
         playerxPosVar = 0;
         playeryPosVar = 0;
         invinShow = false;
@@ -126,6 +127,7 @@ public class enemy_bat_script : MonoBehaviour
                         //a.Play(flying.clip.name);
                         srr.sprite = idleSprite;
                         animIdle = true;
+                        
                     }
                     rb.velocity = new Vector2(0f, 0f);
                 }
@@ -150,9 +152,13 @@ public class enemy_bat_script : MonoBehaviour
                         {
                             //a.Play(idle.clip.name);
                             srr.sprite = idleSprite;
+                            myAnimator.enabled = true;
                         }
                         else
-                        { srr.sprite = flyingSprite; }
+                        {//if !animIdle:
+                            srr.sprite = flyingSprite;
+                            myAnimator.enabled = true; // Re-enable the Animator if disabled
+                        }
 
                         if (activetimer % 20 == 0)
                         {
@@ -233,11 +239,31 @@ public class enemy_bat_script : MonoBehaviour
                     if (!active)
                     {
                         //Sit Still.
-                        //a.Play(idle.clip.name
+
+
+
+                        if (srr.sprite != idleSprite && restingtimer == resttime)
+                        {
+                            AnimatorStateInfo currentState = myAnimator.GetCurrentAnimatorStateInfo(0); // Get the current state info for layer 0
+                            myAnimator.enabled = true;
+                            myAnimator.Play(currentState.fullPathHash, -1, 0f); // Restart the animation at time 0
+                            Debug.Log("myAnimator.enabled = true, because srr.sprite != idleSprite && restingtimer == resttime!");
+                            Debug.Log("Animation started at " + myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + " normalized time.");
+                        }
+
                         srr.sprite = idleSprite;
+
                         if (transform.localScale != new Vector3(restingScale.x, restingScale.y, transform.localScale.z))
                         {
                             transform.localScale = restingScale;
+                        }
+
+                        Debug.Log("animIdle!");
+                        if (myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && !myAnimator.IsInTransition(0) && restingtimer != resttime)
+                        {
+                            myAnimator.Play(myAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash, -1, 0f);
+                            myAnimator.enabled = false; // Stops at the last frame
+                            Debug.Log("Animation finished at " + myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + " normalized time.");
                         }
 
 

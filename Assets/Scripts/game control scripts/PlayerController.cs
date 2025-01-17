@@ -95,6 +95,9 @@ public class PlayerController : MonoBehaviour {
     private bool doublejumped;
     private float gamespeed;
     private bool jumping;
+    [SerializeField]
+    private float swordSwingJumpHeight, swordChargeFloatStrength, swordChargeSwingJumpHeight;
+
 
     //Death
     public Transform deadcheck;

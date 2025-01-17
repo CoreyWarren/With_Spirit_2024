@@ -98,13 +98,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d13c90e068a558445ae69a9cb10a876d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyReward: 40
+  energyReward: 0
   currentHealth: 100
   maxHealth: 100
   player: {fileID: 0}
   movespeed: 0.05
   activetimemax: 80
-  resttime: 80
+  resttime: 120
   restingtimer: 0
   aso: {fileID: 82239259173227142}
   squeaksound: {fileID: 8300000, guid: 74eba7e893dd30c47a35c5178c80661a, type: 3}

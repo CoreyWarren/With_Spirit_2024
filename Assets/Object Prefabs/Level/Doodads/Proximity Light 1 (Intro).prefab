@@ -95,18 +95,12 @@ MonoBehaviour:
   DDLEvent_OnEnterFOV:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: DynamicLight2D.DynamicLightEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   DDLEvent_OnExitFOV:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: DynamicLight2D.DynamicLightEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   DDLEvent_InsideFOV:
     m_PersistentCalls:
       m_Calls: []
-    m_TypeName: DynamicLight2D.DynamicLightEvent, Assembly-CSharp, Version=0.0.0.0,
-      Culture=neutral, PublicKeyToken=null
   Version: 1.3.1
   SolidColor: 0
   LightColor: {r: 0, g: 0, b: 0, a: 0}
@@ -149,7 +143,7 @@ MonoBehaviour:
   whatIsPlayer:
     serializedVersion: 2
     m_Bits: 512
-  lightOnSound: {fileID: 8300000, guid: 13f6dd51d00fd0e48a13d18d3bc089b6, type: 3}
+  lightOnSound: {fileID: 8300000, guid: 665b4c2d7867eb941ab4f1f7c21192d3, type: 3}
 --- !u!82 &2935562862229529008
 AudioSource:
   m_ObjectHideFlags: 0
