@@ -6,8 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
-
-
+    
     //Externally Referring Thingies
     public SpriteRenderer srr;
     public Rigidbody2D rb;
@@ -964,7 +963,7 @@ public class PlayerController : MonoBehaviour {
                     Quaternion.Euler(0, 0, angle));
                 
                 audio1.pitch = Mathf.Clamp(minPitch + (launchedMissiles + i) * pitchIncrement, minPitch, maxPitch);
-                audio1.PlayOneShot(missileLaunch1);
+                audio1.PlayOneShot(missileLaunch1, 0.3f);
             }
 
             launchedMissiles += missilesInThisSet;

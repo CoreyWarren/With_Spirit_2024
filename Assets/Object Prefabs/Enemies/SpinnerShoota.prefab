@@ -207,7 +207,7 @@ MonoBehaviour:
     m_Bits: 257
   xspeed: 2
   awakedistance: 90
-  lasertimermax: 90
+  lasertimermax: 140
   laser: {fileID: 1247413306474400, guid: b0215874b33deff44b1b8c6893433f94, type: 3}
   explosion: {fileID: 1565914846270080, guid: fbc1aa9c775e30b459178c84321ad2aa, type: 3}
   soul: {fileID: 1627501195352646, guid: 48efdd3b0e24a774599a07c302a1158b, type: 3}
