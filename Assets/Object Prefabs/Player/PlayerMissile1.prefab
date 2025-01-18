@@ -128,12 +128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  speed: 3
-  rotateSpeed: 100
+  startSpeed: 3
   newTarget: 0
   longdeath: 0
   longdeathtime: 20
-  lifeTimerMax: 100
+  lifeTimerMax: 300
   lifeTimer: 0
   hitcheck: {fileID: 4136773315594924}
   hitcheckradius: 0.26
@@ -142,17 +141,16 @@ MonoBehaviour:
     m_Bits: 16640
   mexplo1: {fileID: 1260492297595846, guid: 202daad0c3f85a9429e5bea474f9b5dd, type: 3}
   seeking: {fileID: 8300000, guid: 7f24efa4aaf6f634e95905f7bcb56116, type: 3}
-  maxRotateSpeed: 1600
-  rotateSpeedIncrement: 50
-  maxSpeed: 10
-  speedIncreaseRatio: 0.1
-  wobbleFrequencyMin: 0.5
-  wobbleFrequencyMax: 2
-  wobbleAmplitudeMin: 3
-  wobbleAmplitudeMax: 5
-  wobbleDurationMin: 0.5
-  wobbleDurationMax: 2
-  seekRange: 10
+  trackingDistance: 10
+  wobbleFrequencyMin: 1
+  wobbleFrequencyMax: 1
+  wobbleAmplitudeMin: 0.5
+  wobbleAmplitudeMax: 0.97
+  maxDirectionalSpeed: 6
+  maxRotationalSpeed: 300
+  speedIncreaseMultiplier: 0.05
+  rotationSpeedIncrement: 12
+  slowDownRate: 0.571
 --- !u!50 &50802424974395350
 Rigidbody2D:
   serializedVersion: 4
