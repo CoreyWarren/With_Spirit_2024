@@ -17,10 +17,6 @@ public class missile1_script : MonoBehaviour
     [SerializeField] private float startSpeed = 3f;
     private float speed;
 
-    // Two separate rotation speeds:
-    [SerializeField] private float seekRotateSpeed = 2f;     // how quickly we lerp toward the target angle
-    [SerializeField] private float wobbleRotateSpeed = 2f;   // how strongly wobble influences rotation
-
     GameObject closest;
 
     public bool newTarget;
@@ -51,14 +47,21 @@ public class missile1_script : MonoBehaviour
     private float wobblePhaseOffset;
 
     // Wobble & seeking
+
+    // Two separate rotation speeds:
+    [SerializeField] private float seekRotateSpeed = 2f;     // how quickly we lerp toward the target angle
+    [SerializeField] private float wobbleRotateSpeed = 2f;   // how strongly wobble influences rotation
+
+    [SerializeField] private float initialSeekSpeed = 1f;
+
     [SerializeField, Range(1f, 20f)]
     private float trackingDistance = 10f;
 
-    [SerializeField, Range(0.1f, 3f)]
-    private float wobbleFrequencyMin = 0.5f;
+    [SerializeField, Range(0.0001f, 2f)]
+    private float wobbleFrequencyMin = 0.001f;
 
-    [SerializeField, Range(0.1f, 3f)]
-    private float wobbleFrequencyMax = 2.0f;
+    [SerializeField, Range(0.0001f, 2f)]
+    private float wobbleFrequencyMax = 0.001f;
 
     [SerializeField, Range(0.01f, 300f)]
     private float wobbleAmplitudeMin = 0.5f;
@@ -99,6 +102,7 @@ public class missile1_script : MonoBehaviour
 
         // Random phase so they're not all in sync
         wobblePhaseOffset = Random.Range(0f, 1000f);
+        seekRotateSpeed = initialSeekSpeed;
     }
 
     void Update()
@@ -272,6 +276,7 @@ public class missile1_script : MonoBehaviour
     float GetWobbleAngle()
     {
         // Rotational offset from a sine wave + random phase
-        return Mathf.Sin((Time.time + wobblePhaseOffset) * currentWobbleFrequency) * currentWobbleAmplitude;
+        float argument = 2f * Mathf.PI * currentWobbleFrequency * (Time.time + wobblePhaseOffset);
+        return Mathf.Sin(argument) * currentWobbleAmplitude;
     }
 }

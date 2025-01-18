@@ -244,9 +244,9 @@ MonoBehaviour:
   faderSpawnTime: 1
   faderFadeTime: 3
   faderStartingOpacity: 75
-  totalMissiles: 12
+  totalMissiles: 9
   missilesPerSet: 3
-  launchDelay: 0.1
+  launchDelay: 0.4
 --- !u!212 &212834695091158250
 SpriteRenderer:
   m_ObjectHideFlags: 0
