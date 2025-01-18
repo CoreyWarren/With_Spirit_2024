@@ -247,8 +247,6 @@ public class enemy_bat_script : MonoBehaviour
                             AnimatorStateInfo currentState = myAnimator.GetCurrentAnimatorStateInfo(0); // Get the current state info for layer 0
                             myAnimator.enabled = true;
                             myAnimator.Play(currentState.fullPathHash, -1, 0f); // Restart the animation at time 0
-                            Debug.Log("myAnimator.enabled = true, because srr.sprite != idleSprite && restingtimer == resttime!");
-                            Debug.Log("Animation started at " + myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + " normalized time.");
                         }
 
                         srr.sprite = idleSprite;
@@ -257,13 +255,11 @@ public class enemy_bat_script : MonoBehaviour
                         {
                             transform.localScale = restingScale;
                         }
-
-                        Debug.Log("animIdle!");
+                        
                         if (myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1 && !myAnimator.IsInTransition(0) && restingtimer != resttime)
                         {
                             myAnimator.Play(myAnimator.GetCurrentAnimatorStateInfo(0).fullPathHash, -1, 0f);
                             myAnimator.enabled = false; // Stops at the last frame
-                            Debug.Log("Animation finished at " + myAnimator.GetCurrentAnimatorStateInfo(0).normalizedTime + " normalized time.");
                         }
 
 

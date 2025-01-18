@@ -171,6 +171,9 @@ MonoBehaviour:
   jumpheight: 10
   jumptime: 0
   jumptimemax: 10
+  swordSwingJumpHeight: 0
+  swordChargeFloatStrength: 0
+  swordChargeSwingJumpHeight: 0
   deadcheck: {fileID: 4899138927134606}
   deadcheckradius: 0.5
   whatisdeathobstacle:
@@ -241,6 +244,9 @@ MonoBehaviour:
   faderSpawnTime: 1
   faderFadeTime: 3
   faderStartingOpacity: 75
+  totalMissiles: 12
+  missilesPerSet: 3
+  launchDelay: 0.1
 --- !u!212 &212834695091158250
 SpriteRenderer:
   m_ObjectHideFlags: 0

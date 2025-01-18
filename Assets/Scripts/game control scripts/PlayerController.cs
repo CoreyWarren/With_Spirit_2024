@@ -217,6 +217,10 @@ public class PlayerController : MonoBehaviour {
     private float faderSpawnTime, faderFadeTime, faderStartingOpacity;
     private float faderSpawnClock;
 
+    public int totalMissiles = 12; // Total missiles to launch
+    public int missilesPerSet = 3; // Missiles to launch at a time
+    public float launchDelay = 0.2f; // Delay between sets
+
 
     public static int TravelSoulMax
     {
@@ -744,31 +748,10 @@ public class PlayerController : MonoBehaviour {
                     {
                         playerStats.playerEnergy -= energyWeaponCosts[1];
                         energyRegenPeriod = energyWeaponEPause[1];
-                        audio1.PlayOneShot(missileLaunch1);
-
-                        int missileCount = 7; // Change this value to increase or decrease the number of missiles
-                        float randomOffset = Random.Range(-(360f / missileCount), 360f / missileCount); // Random rotation offset for all missiles
-
-                        for (int i = 0; i < missileCount; i++)
-                        {
-                            // Calculate the angle for this missile
-                            float angle = (360f / missileCount) * i + randomOffset;
-
-                            // Calculate the missile position (modify to fit your needs)
-                            Vector3 position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
-
-                            // Instantiate the missile with the calculated rotation
-                            Instantiate(missile1, position, Quaternion.Euler(0, 0, angle));
-                        }
-                    }
-                    else
-                    {
-                        Instantiate(questionMark, transform.position, Quaternion.identity);
-                        audio1.PlayOneShot(no_ammo);
+                        StartCoroutine(LaunchMissileCoroutine());
                     }
                 }
-                else
-                    if (Input.GetKeyDown("x") && playerStats.playerEnergy < energyWeaponCosts[1] && canvas_weaponUI.selectedW == 2)
+                else if (Input.GetKeyDown("x") && playerStats.playerEnergy < energyWeaponCosts[1] && canvas_weaponUI.selectedW == 2)
                 {
                     audio1.PlayOneShot(no_ammo);
                 }
@@ -950,7 +933,51 @@ public class PlayerController : MonoBehaviour {
             
     }
 
-    void FixedUpdate()
+    private IEnumerator LaunchMissileCoroutine()
+    {
+        int launchedMissiles = 0; // Track how many missiles have been launched
+
+        // Define pitch range (e.g., 1.0 to 2.0)
+        float minPitch = 1.0f;
+        float maxPitch = 2.0f;
+        float defaultPitch = audio1.pitch;
+
+        // Calculate the pitch increment based on totalMissiles
+        float pitchIncrement = (maxPitch - minPitch) / totalMissiles;
+
+        while (launchedMissiles < totalMissiles)
+        {
+            // Calculate the number of missiles to launch in this set
+            int missilesInThisSet = Mathf.Min(missilesPerSet, totalMissiles - launchedMissiles);
+
+            // Calculate random offset for this set
+            float randomOffset = Random.Range(-90f, 90f);
+
+            for (int i = 0; i < missilesInThisSet; i++)
+            {
+                // Evenly distribute missiles within this set
+                float angle = (360f / missilesInThisSet) * i + randomOffset;
+
+                // Instantiate the missile
+                Instantiate(missile1,
+                    new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f),
+                    Quaternion.Euler(0, 0, angle));
+                
+                audio1.pitch = Mathf.Clamp(minPitch + (launchedMissiles + i) * pitchIncrement, minPitch, maxPitch);
+                audio1.PlayOneShot(missileLaunch1);
+            }
+
+            launchedMissiles += missilesInThisSet;
+
+            // Wait before launching the next set
+            yield return new WaitForSeconds(launchDelay);
+            audio1.pitch = defaultPitch;
+        }
+
+        // If there's any remaining "wild" missile (when totalMissiles % missilesPerSet != 0), it's already handled by the loop.
+    }
+
+void FixedUpdate()
     {
         
         dead = Physics2D.OverlapCircle(deadcheck.position, deadcheckradius, whatisdeathobstacle);

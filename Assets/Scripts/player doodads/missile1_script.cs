@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class missile1_script : MonoBehaviour {
+public class missile1_script : MonoBehaviour
+{
 
     public Transform target;
 
@@ -63,7 +64,7 @@ public class missile1_script : MonoBehaviour {
                 distance = curDistance;
             }
         }
-            return closest;
+        return closest;
     }
 
     void Start()
@@ -81,84 +82,82 @@ public class missile1_script : MonoBehaviour {
     //UPDATE
     void Update()
     {
-        if (pauser1.paused == false)
+        if (pauser1.paused) return;
+
+        if (!FindEnemy())
         {
-            if (!FindEnemy())
-            {
-                explosion = Instantiate(mexplo1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
-                Destroy(gameObject);
-                PlayerController.soulcount++;
-            }
+            explosion = Instantiate(mexplo1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
+            Destroy(gameObject);
+            PlayerController.soulcount++;
+        }
 
-            hit = Physics2D.OverlapCircle(hitcheck.position, hitcheckradius, whatishit);
-            rb = GetComponent<Rigidbody2D>();
+        hit = Physics2D.OverlapCircle(hitcheck.position, hitcheckradius, whatishit);
+        rb = GetComponent<Rigidbody2D>();
 
-            if(FindClosestEnemy() != null)
-            {
-                target = FindClosestEnemy().transform;
-            }
-            
-
-            if (lifeTimer <= 0 && longdeath == false)
-            {
-                speed = 0;
-                srr.color = new Color(0f, 0f, 0f, 0f);
-                explosion = Instantiate(mexplo1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
-                longdeath = true;
-                lifeTimer = longdeathtime;
-            }
-
-            if (longdeath == true && lifeTimer <= 0)
-            {
-                Destroy(gameObject);
-            }
-
-            lifeTimer--;
-
-            if (speed < 7)
-                speed = speed + speed * 0.05f;
-
-            if (rotateSpeed < 600)
-                rotateSpeed += 2;
-
-            if(target != null)
-            {
-                Vector2 direction = (Vector2)target.position - rb.position;
-                direction.Normalize();
-
-                float rotateAmount = Vector3.Cross(direction, transform.up).z;
-                //rotate it
-                rb.angularVelocity = -rotateAmount * rotateSpeed;
-                rb.velocity = transform.up * speed;
-            }
-            
-            
-
-            
+        if (FindClosestEnemy() != null)
+        {
+            target = FindClosestEnemy().transform;
+        }
 
 
-            if (hit && hitDeath == false)
-            {
-                speed = 0;
-                hitDeath = true;
-                srr.color = new Color(0f, 0f, 0f, 0f);
-                explosion = Instantiate(mexplo1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
-            }
+        if (lifeTimer <= 0 && longdeath == false)
+        {
+            speed = 0;
+            srr.color = new Color(0f, 0f, 0f, 0f);
+            explosion = Instantiate(mexplo1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
+            longdeath = true;
+            lifeTimer = longdeathtime;
+        }
 
-            if (hitDeath == true)
-            {
-                hitTimer--;
-            }
+        if (longdeath == true && lifeTimer <= 0)
+        {
+            Destroy(gameObject);
+        }
 
-            if (hitTimer <= 0 && hitDeath == true)
-            {
-                gameObject.layer = 0;
-                Destroy(gameObject);
-            }
+        lifeTimer--;
+
+        if (speed < 7)
+            speed = speed + speed * 0.05f;
+
+        if (rotateSpeed < 600)
+            rotateSpeed += 2;
+
+        if (target != null)
+        {
+            Vector2 direction = (Vector2)target.position - rb.position;
+            direction.Normalize();
+
+            float rotateAmount = Vector3.Cross(direction, transform.up).z;
+            //rotate it
+            rb.angularVelocity = -rotateAmount * rotateSpeed;
+            rb.velocity = transform.up * speed;
+        }
+
+
+
+
+
+
+        if (hit && hitDeath == false)
+        {
+            speed = 0;
+            hitDeath = true;
+            srr.color = new Color(0f, 0f, 0f, 0f);
+            explosion = Instantiate(mexplo1, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity) as GameObject;
+        }
+
+        if (hitDeath == true)
+        {
+            hitTimer--;
+        }
+
+        if (hitTimer <= 0 && hitDeath == true)
+        {
+            gameObject.layer = 0;
+            Destroy(gameObject);
         }
     }
 
 
-    
 
 }
