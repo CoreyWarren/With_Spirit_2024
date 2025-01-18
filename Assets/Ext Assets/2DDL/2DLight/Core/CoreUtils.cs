@@ -56,7 +56,6 @@ namespace DynamicLight2D
 	{
 		static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
 		{
-			Debug.Log("JUST FINISHED!!!&&");
 			//WRITE FILE
 			string line = "";
 

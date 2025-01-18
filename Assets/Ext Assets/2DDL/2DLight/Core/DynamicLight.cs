@@ -140,7 +140,6 @@ namespace DynamicLight2D
 						internal Collider(CasterCollider co)
 						{
 								collider = co;
-								//Debug.Log(collider);
 								worldPoints = new Vector3[collider.TotalPointsCount];
 								for (int i = 0; i < collider.points.Length; i++)
 										worldPoints[i] = collider.transform.TransformPoint(collider.points[i]);
@@ -1411,7 +1410,6 @@ namespace DynamicLight2D
 													resultante.pos += new Vector3(dir.x*mag,dir.y*mag,0);
 													resultante.angle = PseudoAngle(resultante.pos.x, resultante.pos.y);
 													
-													//Debug.Log(resultante.angle);
 
 													if((resultante.angle >-1 && resultante.angle <0.7f) || (resultante.angle > 2.3f))
 													{

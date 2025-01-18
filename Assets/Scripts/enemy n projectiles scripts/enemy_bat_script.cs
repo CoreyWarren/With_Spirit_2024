@@ -359,7 +359,6 @@ public class enemy_bat_script : MonoBehaviour
                         if (playerStats.playerEnergy + energyReward <= Player_Stats_Storage.playerEnergyMax)
                         {
                             playerStats.playerEnergy += energyReward;
-                            Debug.Log("Giving you energy.");
                         }
                         else
                         { playerStats.playerEnergy = Player_Stats_Storage.playerEnergyMax; }

@@ -151,7 +151,6 @@ public class CasterCollider{
 		float dist = lightToCircleDirection.magnitude;
 		
 		float radius = thisCircle.radius * transform.localScale.x* (1.0001f + (dist/thisCircle.radius) *.00001f) ;
-		//Debug.Log("lightToCircleAngle " + lightToCircleAngle);
 		
 		
 		
@@ -178,9 +177,6 @@ public class CasterCollider{
 		p2 *= dist;
 		p2 += lightSource;
 		
-		//Vector2 rr = new Vector2(lightSource.x * p1.x, lightSource.y * p1.y);
-		//Debug.DrawLine(lightSource,p1,Color.red);
-		//Debug.DrawLine(lightSource,p2,Color.white);
 		
 		Vector2 []poly2DPoints = new Vector2[2];
 		poly2DPoints[0] = (Vector2)transform.InverseTransformPoint((Vector3) p1);

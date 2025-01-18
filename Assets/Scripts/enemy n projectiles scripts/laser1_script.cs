@@ -52,7 +52,6 @@ public class laser1_script : MonoBehaviour {
             if (timePlaying >= grounding.length)
             {
                 Destroy(gameObject);
-                Debug.Log("destroying");
             }
         }
 	}
