@@ -745,11 +745,23 @@ public class PlayerController : MonoBehaviour {
                         playerStats.playerEnergy -= energyWeaponCosts[1];
                         energyRegenPeriod = energyWeaponEPause[1];
                         audio1.PlayOneShot(missileLaunch1);
-                        makeWep = Instantiate(missile1, new Vector3(transform.position.x - .5f, transform.position.y, transform.position.z - 1f), Quaternion.Euler(0, 0, 90)) as GameObject;
-                        makeWep = Instantiate(missile1, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f), Quaternion.Euler(0, 0, 0)) as GameObject;
-                        makeWep = Instantiate(missile1, new Vector3(transform.position.x + .5f, transform.position.y, transform.position.z - 1f), Quaternion.Euler(0, 0, -90)) as GameObject;
-                        makeWep = Instantiate(missile1, new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f), Quaternion.Euler(0, 0, 180)) as GameObject;
-                    }else
+
+                        int missileCount = 7; // Change this value to increase or decrease the number of missiles
+                        float randomOffset = Random.Range(-(360f / missileCount), 360f / missileCount); // Random rotation offset for all missiles
+
+                        for (int i = 0; i < missileCount; i++)
+                        {
+                            // Calculate the angle for this missile
+                            float angle = (360f / missileCount) * i + randomOffset;
+
+                            // Calculate the missile position (modify to fit your needs)
+                            Vector3 position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
+
+                            // Instantiate the missile with the calculated rotation
+                            Instantiate(missile1, position, Quaternion.Euler(0, 0, angle));
+                        }
+                    }
+                    else
                     {
                         Instantiate(questionMark, transform.position, Quaternion.identity);
                         audio1.PlayOneShot(no_ammo);

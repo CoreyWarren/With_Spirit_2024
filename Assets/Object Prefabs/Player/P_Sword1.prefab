@@ -122,21 +122,19 @@ MonoBehaviour:
   chargeSprite1: {fileID: 21300000, guid: 626fca6d2146d7b47905df8c83d39df6, type: 3}
   charge1: {fileID: 8300000, guid: 1748d825aeabfcf41b391e6202208d6a, type: 3}
   charge2: {fileID: 8300000, guid: b8cb4eb27f182c84f88ad8d73df5d879, type: 3}
-  charge3: {fileID: 8300000, guid: 04827b88d9d947349b8f41a261391abd, type: 3}
-  charge4: {fileID: 8300000, guid: 560f393dff503324e8d145e184b844d6, type: 3}
   swing2Sound: {fileID: 8300000, guid: 27e2a8e81da246f4ebfef5a4a8b39aa3, type: 3}
   swing3Sound: {fileID: 8300000, guid: b7524b7918b118946a9282923160c521, type: 3}
-  smooth: 12
+  rotationSpeed: 12
   radius: 0
   energyCost: 10
-  deltaSpeed: 100
+  movementSpeed: 100
   trail: {fileID: 2712971852910873359, guid: 3548db761e6d6464dbb10a536898fb64, type: 3}
   trailPeriod: 0.03
   trailFadeTime: 3
   trailOpacityPercent: 30
-  trailWidthMultiplier1: 0.7
-  trailWidthMultiplier2: 1.5
-  trailWidthMultiplier3: 2
+  trailWidthLow: 0.7
+  trailWidthMedium: 1.5
+  trailWidthHigh: 2
 --- !u!61 &61700504379455838
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -175,7 +173,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.286
+  m_Volume: 0.778
   m_Pitch: 1.2
   Loop: 0
   Mute: 0
