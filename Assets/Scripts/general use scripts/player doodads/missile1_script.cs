@@ -12,12 +12,14 @@ public class missile1_script : MonoBehaviour
     public Transform target;
 
     private Rigidbody2D rb;
-    SpriteRenderer srr;
+    private SpriteRenderer srr;
 
     [SerializeField] private float startSpeed = 3f;
-
     private float speed;
-    private float rotateSpeed;
+
+    // Two separate rotation speeds:
+    [SerializeField] private float seekRotateSpeed = 2f;     // how quickly we lerp toward the target angle
+    [SerializeField] private float wobbleRotateSpeed = 2f;   // how strongly wobble influences rotation
 
     GameObject closest;
 
@@ -38,14 +40,15 @@ public class missile1_script : MonoBehaviour
     private bool hitDeath = false;
 
     public GameObject mexplo1;
-    GameObject explosion;
+    private GameObject explosion;
 
     private AudioSource audio1;
     public AudioClip seeking;
 
-    // Actual random wobble values per missile
+    // Random wobble
     private float currentWobbleFrequency;
     private float currentWobbleAmplitude;
+    private float wobblePhaseOffset;
 
     // Wobble & seeking
     [SerializeField, Range(1f, 20f)]
@@ -57,46 +60,84 @@ public class missile1_script : MonoBehaviour
     [SerializeField, Range(0.1f, 3f)]
     private float wobbleFrequencyMax = 2.0f;
 
-    [SerializeField, Range(0.1f, 3f)]
+    [SerializeField, Range(0.01f, 300f)]
     private float wobbleAmplitudeMin = 0.5f;
 
-    [SerializeField, Range(0.1f, 3f)]
+    [SerializeField, Range(0.1f, 300f)]
     private float wobbleAmplitudeMax = 2.0f;
 
-    // Speeds & rotation
+    // Speeds
     [SerializeField, Range(1f, 20f)]
     private float maxDirectionalSpeed = 10f;
-
-    [SerializeField, Range(50f, 1000f)]
-    private float maxRotationalSpeed = 600f;
 
     [SerializeField, Range(0f, 1f)]
     private float speedIncreaseMultiplier = 0.05f;
 
-    [SerializeField, Range(0f, 50f)]
-    private float rotationSpeedIncrement = 2f;
-
     [SerializeField, Range(0f, 2f)]
     private float slowDownRate = 0.5f;
 
+    // --- Start ---
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        srr = GetComponent<SpriteRenderer>();
+        audio1 = GetComponent<AudioSource>();
 
-    private bool noTargetDirectionSet = false;
-    private Vector2 savedDirection;
+        lifeTimer = lifeTimerMax + Random.Range(-20, 20);
+        hitTimer = hitTimerMax;
+        newTarget = false;
 
+        audio1.pitch += Random.Range(-0.3f, 0.3f);
+        audio1.PlayOneShot(seeking);
+        longdeath = false;
 
-    // --- Original Functions (Unchanged) ---
-    // (Keeping these exactly as requested.)
+        speed = startSpeed;
+
+        // Assign random wobble values
+        currentWobbleFrequency = Random.Range(wobbleFrequencyMin, wobbleFrequencyMax);
+        currentWobbleAmplitude = Random.Range(wobbleAmplitudeMin, wobbleAmplitudeMax);
+
+        // Random phase so they're not all in sync
+        wobblePhaseOffset = Random.Range(0f, 1000f);
+    }
+
+    void Update()
+    {
+        if (!pauser1.paused)
+        {
+            CheckIfAnyEnemiesExist();
+            CheckForHit();
+            AcquireClosestTarget();
+            CheckForDeath();
+
+            // Only increase speed if there's a target
+            if (target != null)
+            {
+                HandleSpeedAcceleration();
+            }
+        }
+    }
+
+    // Run physics-related movement in FixedUpdate, using Time.fixedDeltaTime
+    void FixedUpdate()
+    {
+        if (!pauser1.paused)
+        {
+            SeekAndMove(); // includes wobble
+        }
+    }
+
+    // --- Unchanged original methods ---
+
     GameObject FindEnemy()
     {
-        GameObject go;
-        go = GameObject.FindGameObjectWithTag("Enemy");
+        GameObject go = GameObject.FindGameObjectWithTag("Enemy");
         return go;
     }
 
     GameObject FindClosestEnemy()
     {
-        GameObject[] gos;
-        gos = GameObject.FindGameObjectsWithTag("Enemy");
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
         foreach (GameObject go in gos)
@@ -112,52 +153,11 @@ public class missile1_script : MonoBehaviour
         return closest;
     }
 
-    // --- Start ---
-    // We now get `rb` and `srr` here, so we removed the "rb = GetComponent<Rigidbody2D>()" line from Update().
-    void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        srr = GetComponent<SpriteRenderer>();
-        audio1 = GetComponent<AudioSource>();
-
-        lifeTimer = lifeTimerMax + Random.Range(-20, 20);
-        hitTimer = hitTimerMax;
-        newTarget = false;
-
-        audio1.pitch += Random.Range(-0.3f, 0.3f);
-        audio1.PlayOneShot(seeking);
-
-        longdeath = false;
-
-        speed = startSpeed;
-
-        // Assign random wobble values for this missile
-        currentWobbleFrequency = Random.Range(wobbleFrequencyMin, wobbleFrequencyMax);
-        currentWobbleAmplitude = Random.Range(wobbleAmplitudeMin, wobbleAmplitudeMax);
-    }
-
-    // --- Update ---
-    void Update()
-    {
-        if (pauser1.paused == false)
-        {
-            CheckIfAnyEnemiesExist();
-            CheckForHit();
-            AcquireClosestTarget();
-            CheckForDeath();
-            if (target!=null) HandleSpeedAndRotateAcceleration();
-            SeekAndMove(); // includes wobble
-        }
-    }
-
-    // --- Splits out your existing logic into smaller chunks. ---
-
     void CheckIfAnyEnemiesExist()
     {
-        // If there are no enemies at all, we destroy ourselves immediately
         if (!FindEnemy())
         {
-            explosion = Instantiate(mexplo1, transform.position, Quaternion.identity) as GameObject;
+            explosion = Instantiate(mexplo1, transform.position, Quaternion.identity);
             Destroy(gameObject);
             PlayerController.soulcount++;
         }
@@ -165,22 +165,19 @@ public class missile1_script : MonoBehaviour
 
     void CheckForHit()
     {
-        // OverlapCircle to see if we hit something
         hit = Physics2D.OverlapCircle(hitcheck.position, hitcheckradius, whatishit);
-
-        if (hit && hitDeath == false)
+        if (hit && !hitDeath)
         {
             speed = 0;
             hitDeath = true;
             srr.color = new Color(0f, 0f, 0f, 0f);
-            explosion = Instantiate(mexplo1, transform.position, Quaternion.identity) as GameObject;
+            explosion = Instantiate(mexplo1, transform.position, Quaternion.identity);
         }
 
-        // If we've already hit, count down to final destruction
-        if (hitDeath == true)
+        if (hitDeath)
         {
             hitTimer--;
-            if (hitTimer <= 0 && hitDeath == true)
+            if (hitTimer <= 0)
             {
                 gameObject.layer = 0;
                 Destroy(gameObject);
@@ -190,27 +187,28 @@ public class missile1_script : MonoBehaviour
 
     void AcquireClosestTarget()
     {
-        // Try finding the nearest enemy
         if (FindClosestEnemy() != null)
         {
             target = FindClosestEnemy().transform;
+        }
+        else
+        {
+            target = null;
         }
     }
 
     void CheckForDeath()
     {
-        // If lifeTimer expired but we haven't triggered longdeath yet
-        if (lifeTimer <= 0 && longdeath == false)
+        if (lifeTimer <= 0 && !longdeath)
         {
             speed = 0;
             srr.color = new Color(0f, 0f, 0f, 0f);
-            explosion = Instantiate(mexplo1, transform.position, Quaternion.identity) as GameObject;
+            explosion = Instantiate(mexplo1, transform.position, Quaternion.identity);
             longdeath = true;
             lifeTimer = longdeathtime;
         }
 
-        // If we've been in the longdeath state and time is up
-        if (longdeath == true && lifeTimer <= 0)
+        if (longdeath && lifeTimer <= 0)
         {
             Destroy(gameObject);
         }
@@ -218,34 +216,40 @@ public class missile1_script : MonoBehaviour
         lifeTimer--;
     }
 
-    void HandleSpeedAndRotateAcceleration()
+    void HandleSpeedAcceleration()
     {
-        // Increase speed gradually
         if (speed < maxDirectionalSpeed)
-            speed = speed + speed * speedIncreaseMultiplier;
-
-        // Increase rotateSpeed gradually
-        if (rotateSpeed < maxRotationalSpeed)
-            rotateSpeed += rotationSpeedIncrement;
+        {
+            speed += speed * speedIncreaseMultiplier;
+        }
     }
 
+    // --- The new SeekAndMove using fixedDeltaTime ---
     void SeekAndMove()
     {
-        // If we have a valid target in range, steer toward it with wobble
+        // 1) If we have a target in range, LERP from current rotation to target angle
         if (target != null)
         {
             float dist = Vector2.Distance(target.position, transform.position);
             if (dist <= trackingDistance)
             {
-                Vector2 direction = (target.position - transform.position).normalized;
-                float rotateAmount = Vector3.Cross(direction, transform.up).z;
+                // This is why we don't instantly snap:
+                // We're using Mathf.LerpAngle from the missile's current angle
+                // to the target angle, scaled by a small seekRotateSpeed.
+                // The smaller "seekRotateSpeed," the slower it turns => no snap.
 
-                // Add wobble
-                rotateAmount += GetWobbleOffset();
+                // (a) Determine angle toward target
+                Vector2 dir = (target.position - transform.position).normalized;
+                float targetAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90f;
 
-                // Manual rotation (multiply by Time.deltaTime or fixedDeltaTime to keep it smooth)
-                float newRotation = rb.rotation - (rotateAmount * rotateSpeed * Time.fixedDeltaTime);
-                rb.rotation = newRotation;
+                // (b) Lerp toward that angle
+                float lerpedAngle = Mathf.LerpAngle(rb.rotation, targetAngle, seekRotateSpeed * Time.fixedDeltaTime);
+
+                // (c) Add the wobble on top
+                float wobble = GetWobbleAngle() * wobbleRotateSpeed * Time.fixedDeltaTime;
+                float finalAngle = lerpedAngle + wobble;
+
+                rb.rotation = finalAngle;
 
                 // Move forward
                 rb.velocity = transform.up * speed;
@@ -253,26 +257,21 @@ public class missile1_script : MonoBehaviour
             }
         }
 
-        // No target in range: slow down and only wobble
-        // 1) Gradually reduce speed to 0
+        // 2) No target => slow down & do gentle wobble around the current direction
         speed -= slowDownRate * Time.fixedDeltaTime;
         if (speed < 0f) speed = 0f;
 
-        // 2) Stop using rotateSpeed so you don't keep spinning
-        //    Just rotate from wobble alone
-        float wobble = GetWobbleOffset();
-        rb.rotation += wobble * Time.fixedDeltaTime;
+        // Only the wobble offset
+        float noTargetWobble = GetWobbleAngle() * wobbleRotateSpeed * Time.fixedDeltaTime;
+        rb.rotation += noTargetWobble;
 
-        // Move forward at the reduced speed in whatever direction we’re currently facing
         rb.velocity = transform.up * speed;
     }
 
-
-
     // --- Wobble helper ---
-    float GetWobbleOffset()
+    float GetWobbleAngle()
     {
-        // Rotational offset from a simple sine wave
-        return Mathf.Sin(Time.time * currentWobbleFrequency) * currentWobbleAmplitude;
+        // Rotational offset from a sine wave + random phase
+        return Mathf.Sin((Time.time + wobblePhaseOffset) * currentWobbleFrequency) * currentWobbleAmplitude;
     }
 }
