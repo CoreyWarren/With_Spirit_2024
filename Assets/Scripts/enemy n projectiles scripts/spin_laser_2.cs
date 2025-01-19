@@ -60,7 +60,7 @@ public class spin_laser_2 : MonoBehaviour {
 
             rb.angularVelocity = -rotateAmount * rotatespeed;
 
-            rb.velocity = transform.forward * bulletspeed;
+            rb.linearVelocity = transform.forward * bulletspeed;
 
             if (rotatespeed > 50)
             {
@@ -70,7 +70,7 @@ public class spin_laser_2 : MonoBehaviour {
             {
                 bulletspeed = bulletspeed - ((bulletspeed / 1000) * bulletSpeedDecay);
             }
-            rb.velocity = transform.up * bulletspeed;
+            rb.linearVelocity = transform.up * bulletspeed;
             hit = Physics2D.OverlapCircle(hitcheck.position, hitcheckradius, whatishit);
 
             lifeTimer--;

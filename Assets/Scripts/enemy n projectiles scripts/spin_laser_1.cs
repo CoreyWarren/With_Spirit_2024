@@ -22,7 +22,7 @@ public class spin_laser_1 : MonoBehaviour {
     {
         if (pauser1.paused == false)
         {
-            rb.velocity = new Vector2(0f, yspeed);
+            rb.linearVelocity = new Vector2(0f, yspeed);
 
             lifetimer--;
             if (lifetimer == 0)

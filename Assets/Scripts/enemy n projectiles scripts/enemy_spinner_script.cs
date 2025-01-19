@@ -30,7 +30,7 @@ public class enemy_spinner_script : MonoBehaviour {
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
-        rb.velocity = new Vector2(xspeed, 0f);
+        rb.linearVelocity = new Vector2(xspeed, 0f);
         blinkon = false;
         blinktimer = blinktimermax;
         blinkontimer = blinkontimermax;
@@ -46,23 +46,23 @@ public class enemy_spinner_script : MonoBehaviour {
 
         if (righttouching)
         {
-            rb.velocity = new Vector2(-xspeed, 0f);
+            rb.linearVelocity = new Vector2(-xspeed, 0f);
             goingright = false;
         }
 
         if (lefttouching)
         {
-            rb.velocity = new Vector2(xspeed, 0f);
+            rb.linearVelocity = new Vector2(xspeed, 0f);
             goingright = true;
         }
 
-        if (goingright && rb.velocity.x < xspeed)
+        if (goingright && rb.linearVelocity.x < xspeed)
         {
-            rb.velocity = new Vector2(xspeed, 0f);
+            rb.linearVelocity = new Vector2(xspeed, 0f);
         }
-        if (!goingright && rb.velocity.x > -xspeed)
+        if (!goingright && rb.linearVelocity.x > -xspeed)
         {
-            rb.velocity = new Vector2(-xspeed, 0f);
+            rb.linearVelocity = new Vector2(-xspeed, 0f);
         }
 
         if(blinktimer == 0 && !blinkon)

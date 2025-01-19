@@ -12,7 +12,7 @@ public class enemylaser_LR_script : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = gameObject.GetComponent<Rigidbody2D>();
-		rb.velocity = new Vector2(laserspeed, 0);
+		rb.linearVelocity = new Vector2(laserspeed, 0);
 		laserspeedinit = laserspeed;
         lifeTimer = lifeTimerMax;
 	}
@@ -25,7 +25,7 @@ public class enemylaser_LR_script : MonoBehaviour {
             if (laserspeed < laserspeedinit * 3)
             {
                 laserspeed += .3f;
-                rb.velocity = new Vector2(laserspeed, 0);
+                rb.linearVelocity = new Vector2(laserspeed, 0);
             }
 
             lifeTimer--;

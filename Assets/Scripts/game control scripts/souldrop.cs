@@ -45,7 +45,7 @@ public class souldrop : MonoBehaviour {
         float value = 1;
         float posOrNeg = Random.value < 0.5f ? -1f : 1f;
         posOrNeg = posOrNeg * value;
-        rb.velocity = new Vector2(posOrNeg * (Random.Range(minInitialXSpeed, maxInitialXSpeed)), posOrNeg * Random.Range(minInitialYSpeed, maxInitialYSpeed));
+        rb.linearVelocity = new Vector2(posOrNeg * (Random.Range(minInitialXSpeed, maxInitialXSpeed)), posOrNeg * Random.Range(minInitialYSpeed, maxInitialYSpeed));
         t = 0;
         defaultColor = srr.color;
         Physics.IgnoreLayerCollision(11, 14);
@@ -145,16 +145,16 @@ public class souldrop : MonoBehaviour {
         }
 
         //Limit Soul Rigidbody Speed
-        if (Mathf.Abs(rb.velocity.y) > maxYSpeed)
+        if (Mathf.Abs(rb.linearVelocity.y) > maxYSpeed)
         {
-            float storeSign = rb.velocity.y / Mathf.Abs(rb.velocity.y);
-            rb.velocity = new Vector2(rb.velocity.x, maxYSpeed * storeSign);
+            float storeSign = rb.linearVelocity.y / Mathf.Abs(rb.linearVelocity.y);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, maxYSpeed * storeSign);
         }
 
-        if (Mathf.Abs(rb.velocity.x) > maxXSpeed)
+        if (Mathf.Abs(rb.linearVelocity.x) > maxXSpeed)
         {
-            float storeSign = rb.velocity.x / Mathf.Abs(rb.velocity.x);
-            rb.velocity = new Vector2(maxXSpeed * storeSign, rb.velocity.y);
+            float storeSign = rb.linearVelocity.x / Mathf.Abs(rb.linearVelocity.x);
+            rb.linearVelocity = new Vector2(maxXSpeed * storeSign, rb.linearVelocity.y);
         }
 
         

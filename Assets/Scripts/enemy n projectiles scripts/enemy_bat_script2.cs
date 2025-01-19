@@ -119,7 +119,7 @@ public class enemy_bat_script2 : MonoBehaviour
                     //a.Play(flying.clip.name);
                     srr.sprite = flyingSprite;
                 }
-                rb.velocity = new Vector2(0f, 0f);
+                rb.linearVelocity = new Vector2(0f, 0f);
             }
             else
             {
@@ -146,41 +146,41 @@ public class enemy_bat_script2 : MonoBehaviour
                         //X
                         if (player.position.x + playerxPosVar < transform.position.x) //If player TARGET is to the left...
                         {
-                            rb.velocity += new Vector2(-jumpWidth, 0f);
+                            rb.linearVelocity += new Vector2(-jumpWidth, 0f);
                         }
                         else if (player.position.x + playerxPosVar > transform.position.x)  //If player TARGET is to the right...
                         {
-                            rb.velocity += new Vector2(jumpWidth, 0f);
+                            rb.linearVelocity += new Vector2(jumpWidth, 0f);
                         }
                         //Y
                         if (player.position.y + playeryPosVar < transform.position.y) //If player TARGET is below...
                         {
-                            rb.velocity += new Vector2(0f, jumpHeight / jumpHeightMultiplier);
+                            rb.linearVelocity += new Vector2(0f, jumpHeight / jumpHeightMultiplier);
                         }
                         else if (player.position.y + playeryPosVar > transform.position.y) //If player TARGET is above...
                         {
-                            rb.velocity += new Vector2(0f, jumpHeight);
+                            rb.linearVelocity += new Vector2(0f, jumpHeight);
                         }
                     }
 
-                    if (rb.velocity.x > maxXSpeed)
+                    if (rb.linearVelocity.x > maxXSpeed)
                     {
-                        rb.velocity = new Vector2(maxXSpeed, rb.velocity.y);
+                        rb.linearVelocity = new Vector2(maxXSpeed, rb.linearVelocity.y);
                     }
                     else
-                    if (rb.velocity.x < -maxXSpeed)
+                    if (rb.linearVelocity.x < -maxXSpeed)
                     {
-                        rb.velocity = new Vector2(-maxXSpeed, rb.velocity.y);
+                        rb.linearVelocity = new Vector2(-maxXSpeed, rb.linearVelocity.y);
                     }
 
-                    if (rb.velocity.y > maxYSpeed)
+                    if (rb.linearVelocity.y > maxYSpeed)
                     {
-                        rb.velocity = new Vector2(rb.velocity.x, maxYSpeed);
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, maxYSpeed);
                     }
                     else
-                    if (rb.velocity.y < -maxYSpeed)
+                    if (rb.linearVelocity.y < -maxYSpeed)
                     {
-                        rb.velocity = new Vector2(rb.velocity.x, -maxYSpeed);
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxYSpeed);
                     }
 
 

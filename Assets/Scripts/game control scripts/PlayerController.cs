@@ -272,9 +272,6 @@ public class PlayerController : MonoBehaviour {
 
         if (pauser1.paused == false)
         {
-            gamespeed = Time.timeScale;
-            Time.maximumDeltaTime = gamespeed;
-            Time.fixedDeltaTime = gamespeed * 0.02f;
 
             if (dying)
             {
@@ -356,8 +353,8 @@ public class PlayerController : MonoBehaviour {
                     jumptime = 0;
                     if(jumping)
                     {
-                        if (rb.velocity.y > 0f)
-                        { rb.velocity = new Vector2(rb.velocity.x, 0f); }
+                        if (rb.linearVelocity.y > 0f)
+                        { rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); }
                         jumping = false;
                     }
                 }
@@ -427,7 +424,7 @@ public class PlayerController : MonoBehaviour {
                     }
 
                     if (!wallridingleft)
-                        rb.velocity = new Vector2(rb.velocity.x - moveacceleration, rb.velocity.y);
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x - moveacceleration, rb.linearVelocity.y);
                 }
                 if (Input.GetKey(KeyCode.RightArrow))
                 {
@@ -447,31 +444,31 @@ public class PlayerController : MonoBehaviour {
 
 
                     if (!wallridingright)
-                        rb.velocity = new Vector2(rb.velocity.x + moveacceleration, rb.velocity.y);
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x + moveacceleration, rb.linearVelocity.y);
                 }
 
 
                 //Max Horiz Speed
-                if (rb.velocity.x > movespeed)
+                if (rb.linearVelocity.x > movespeed)
                 {
-                    rb.velocity = new Vector2(movespeed, rb.velocity.y);
+                    rb.linearVelocity = new Vector2(movespeed, rb.linearVelocity.y);
                 }
-                else if (rb.velocity.x < -movespeed)
+                else if (rb.linearVelocity.x < -movespeed)
                 {
-                    rb.velocity = new Vector2(-movespeed, rb.velocity.y);
+                    rb.linearVelocity = new Vector2(-movespeed, rb.linearVelocity.y);
                 }
                 
 
                 //Max Fall Speed / Wallride Speed
                 
-                if (rb.velocity.y < -maxfallspeed)
+                if (rb.linearVelocity.y < -maxfallspeed)
                 {
-                    rb.velocity = new Vector2(rb.velocity.x, -maxfallspeed);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxfallspeed);
                 }
-                if (rb.velocity.y < -maxfallspeedwallriding && ((wallridingleft && Input.GetKey(KeyCode.LeftArrow))
+                if (rb.linearVelocity.y < -maxfallspeedwallriding && ((wallridingleft && Input.GetKey(KeyCode.LeftArrow))
                     || (wallridingright && Input.GetKey(KeyCode.RightArrow))))
                 {
-                    rb.velocity = new Vector2(rb.velocity.x, -maxfallspeedwallriding);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, -maxfallspeedwallriding);
                 }
 
 
@@ -481,13 +478,13 @@ public class PlayerController : MonoBehaviour {
                 //Instantiating Fader Trail
 
                 
-                    if (rb.velocity.y == -maxfallspeed)
+                    if (rb.linearVelocity.y == -maxfallspeed)
                     {
                         if (faderSpawnClock <= 0)
                         {
                             faderSpawnClock = faderSpawnTime;
                             GameObject newFader;
-                        if (rb.velocity.x == movespeed || rb.velocity.x == -movespeed)
+                        if (rb.linearVelocity.x == movespeed || rb.linearVelocity.x == -movespeed)
                         {
                             Vector3 randoPosition = transform.position + new Vector3(Random.Range(-0.2f, 0.2f), Random.Range(-0.2f, 0.2f), 1f);
                             newFader = Instantiate(faderObject, randoPosition, Quaternion.identity);
@@ -507,7 +504,7 @@ public class PlayerController : MonoBehaviour {
                             faderSpawnClock -= Time.fixedDeltaTime * 100;
                         }
                     }
-                    else if (rb.velocity.x == movespeed || rb.velocity.x == -movespeed)
+                    else if (rb.linearVelocity.x == movespeed || rb.linearVelocity.x == -movespeed)
                     {
                         if (faderSpawnClock <= 0)
                         {
@@ -537,21 +534,21 @@ public class PlayerController : MonoBehaviour {
 
                     //SPRITE CHANGES/////////////////////
                     if
-                    ((rb.velocity.y < -maxfallspeed / 2) && (Input.GetKey(KeyCode.RightArrow)))
+                    ((rb.linearVelocity.y < -maxfallspeed / 2) && (Input.GetKey(KeyCode.RightArrow)))
                 {
                     //IF fall speed is fast enough and pressing D
                     srr.sprite = fastfallR1;
                     spr = "fastFallingRight";
                 }
                 else if
-                    ((rb.velocity.y < -maxfallspeed / 2) && (Input.GetKey(KeyCode.LeftArrow)))
+                    ((rb.linearVelocity.y < -maxfallspeed / 2) && (Input.GetKey(KeyCode.LeftArrow)))
                 {
                     //IF fall speed is fast enough and pressing A
                     srr.sprite = fastfallL1;
                     spr = "fastFallingLeft";
                 }
                 else if
-                    (rb.velocity.y < -maxfallspeed / 2)
+                    (rb.linearVelocity.y < -maxfallspeed / 2)
                 {
                     //IF fall speed is fast enough, but not the above...
                     srr.sprite = fastfall1;
@@ -600,12 +597,12 @@ public class PlayerController : MonoBehaviour {
                     {
                         groundingTimer = groundingTimerMax;
                     }
-                    if (rb.velocity.x > 0)
+                    if (rb.linearVelocity.x > 0)
                     {
                         srr.sprite = groundingRight;
                     }
                     else
-                    if (rb.velocity.x < 0)
+                    if (rb.linearVelocity.x < 0)
                     {
                         srr.sprite = groundingLeft;
                     }
@@ -665,11 +662,11 @@ public class PlayerController : MonoBehaviour {
                             //{ soulcount = 0; }
                             audio1.PlayOneShot(soullost);
                         }
-                        if(rb.velocity.y < 0)
-                        { rb.velocity += new Vector2(0, damageJumpFalling); }
+                        if(rb.linearVelocity.y < 0)
+                        { rb.linearVelocity += new Vector2(0, damageJumpFalling); }
                         else
                         {
-                          rb.velocity += new Vector2(0, damageJumpUpward);
+                          rb.linearVelocity += new Vector2(0, damageJumpUpward);
                         }
                         
                         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -800,7 +797,7 @@ public class PlayerController : MonoBehaviour {
     {
         float jumpFraction = jumptime / jumptimemax;
         float jumpForce = Mathf.Sqrt(2 * jumpheight * Mathf.Abs(Physics2D.gravity.y)) * Mathf.Sin(jumpFraction * Mathf.PI / 2);
-        rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
     }
 
     public void WallJumpL()
@@ -808,7 +805,7 @@ public class PlayerController : MonoBehaviour {
         float jumpFraction = jumptime / jumptimemax;
         float jumpForce = Mathf.Sqrt(2 * jumpheight * Mathf.Abs(Physics2D.gravity.y)) * Mathf.Sin(jumpFraction * Mathf.PI / 2);
         float jumpForceHorizontal = walljumphorizontal * Mathf.Sin(jumpFraction * Mathf.PI / 2);
-        rb.velocity = new Vector2(rb.velocity.x + jumpForceHorizontal, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x + jumpForceHorizontal, jumpForce);
     }
 
     public void WallJumpR()
@@ -816,11 +813,11 @@ public class PlayerController : MonoBehaviour {
         float jumpFraction = jumptime / jumptimemax;
         float jumpForce = Mathf.Sqrt(2 * jumpheight * Mathf.Abs(Physics2D.gravity.y)) * Mathf.Sin(jumpFraction * Mathf.PI / 2);
         float jumpForceHorizontal = walljumphorizontal * Mathf.Sin(jumpFraction * Mathf.PI / 2);
-        rb.velocity = new Vector2(rb.velocity.x - jumpForceHorizontal, jumpForce);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x - jumpForceHorizontal, jumpForce);
     }
     public void Gravity()
     {
-        rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y-gravity);
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y-gravity);
     }
 
 
@@ -923,12 +920,12 @@ public class PlayerController : MonoBehaviour {
 
         
         //Horizontal Friction
-        if (rb.velocity.x - leftrightfriction > 0)
-            rb.velocity = new Vector2(rb.velocity.x - leftrightfriction, rb.velocity.y);
-        else if (rb.velocity.x + leftrightfriction < 0)
-            rb.velocity = new Vector2(rb.velocity.x + leftrightfriction, rb.velocity.y);
+        if (rb.linearVelocity.x - leftrightfriction > 0)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x - leftrightfriction, rb.linearVelocity.y);
+        else if (rb.linearVelocity.x + leftrightfriction < 0)
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x + leftrightfriction, rb.linearVelocity.y);
         else
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             
     }
 

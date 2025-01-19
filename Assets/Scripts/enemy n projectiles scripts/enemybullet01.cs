@@ -22,7 +22,7 @@ public class enemybullet01 : MonoBehaviour {
 		Vector2 direction = (Vector2)player.position - rb.position;
 		float rotateAmount = Vector3.Cross(direction, transform.up).z;
 		rb.angularVelocity = -rotateAmount * rotatespeed;
-        rb.velocity = transform.up * bulletspeed;
+        rb.linearVelocity = transform.up * bulletspeed;
 
 		if (bulletspeed < 9f)
 		{

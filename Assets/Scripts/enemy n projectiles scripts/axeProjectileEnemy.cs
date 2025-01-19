@@ -65,7 +65,7 @@ public class axeProjectileEnemy : MonoBehaviour
                 gameObject.layer = 0;
                 Collider2D my2dCollider;
                 my2dCollider = GetComponent<Collider2D>();
-                rb1.velocity = new Vector2(-rb1.velocity.x, -rb1.velocity.y);
+                rb1.linearVelocity = new Vector2(-rb1.linearVelocity.x, -rb1.linearVelocity.y);
                 srr.color -= new Color(0.5f, 0.5f, 0.5f, 0.5f);
                 my2dCollider.enabled = false;
                 makingFades = false;
@@ -95,11 +95,11 @@ public class axeProjectileEnemy : MonoBehaviour
             {
                 if (goingRight && !goLimp)
                 {
-                    rb1.velocity += new Vector2(xVelocity, yVelocity);
+                    rb1.linearVelocity += new Vector2(xVelocity, yVelocity);
                 }
                 else if (!goingRight && !goLimp)
                 {
-                    rb1.velocity += new Vector2(-xVelocity, yVelocity);
+                    rb1.linearVelocity += new Vector2(-xVelocity, yVelocity);
                 }
 
                 timer1 -= Time.deltaTime * 10;
@@ -115,11 +115,11 @@ public class axeProjectileEnemy : MonoBehaviour
             {
                 if (goingRight && !goLimp)
                 {
-                    rb1.velocity += new Vector2(xVelocity/2f, -yVelocity/3f);
+                    rb1.linearVelocity += new Vector2(xVelocity/2f, -yVelocity/3f);
                 }
                 else if (!goingRight && !goLimp)
                 {
-                    rb1.velocity += new Vector2(-xVelocity/2f, -yVelocity/3f);
+                    rb1.linearVelocity += new Vector2(-xVelocity/2f, -yVelocity/3f);
                 }
                 timer2 -= Time.deltaTime * 10;
             }
@@ -132,26 +132,26 @@ public class axeProjectileEnemy : MonoBehaviour
 
             //Check-ins
             {
-                if(rb1.velocity.x > maxHorizontalSpeed)
+                if(rb1.linearVelocity.x > maxHorizontalSpeed)
                 {
-                    rb1.velocity = new Vector2(maxHorizontalSpeed, rb1.velocity.y);
+                    rb1.linearVelocity = new Vector2(maxHorizontalSpeed, rb1.linearVelocity.y);
                 }else if
-                    (rb1.velocity.x < -maxHorizontalSpeed)
+                    (rb1.linearVelocity.x < -maxHorizontalSpeed)
                 {
-                    rb1.velocity = new Vector2(-maxHorizontalSpeed, rb1.velocity.y);
+                    rb1.linearVelocity = new Vector2(-maxHorizontalSpeed, rb1.linearVelocity.y);
                 }
             }
 
 
             {
-                if (rb1.velocity.y > maxVerticalSpeed)
+                if (rb1.linearVelocity.y > maxVerticalSpeed)
                 {   
-                    rb1.velocity = new Vector2(rb1.velocity.x, maxVerticalSpeed);
+                    rb1.linearVelocity = new Vector2(rb1.linearVelocity.x, maxVerticalSpeed);
                 }   
                 else if
-                   (rb1.velocity.y < -maxVerticalSpeed)
+                   (rb1.linearVelocity.y < -maxVerticalSpeed)
                 {   
-                    rb1.velocity = new Vector2(rb1.velocity.x, -maxVerticalSpeed);
+                    rb1.linearVelocity = new Vector2(rb1.linearVelocity.x, -maxVerticalSpeed);
                 }   
             }
 

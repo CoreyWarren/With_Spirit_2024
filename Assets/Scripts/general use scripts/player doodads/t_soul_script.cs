@@ -138,8 +138,8 @@ public class t_soul_script : MonoBehaviour {
             rb.angularVelocity = -rotateAmount * rotatespeed;
 
 
-            rb.velocity = transform.up * bulletspeed;
-            rb.velocity += new Vector2(orbitSize * Mathf.Cos(t), orbitSize * Mathf.Sin(t));
+            rb.linearVelocity = transform.up * bulletspeed;
+            rb.linearVelocity += new Vector2(orbitSize * Mathf.Cos(t), orbitSize * Mathf.Sin(t));
 
 
 

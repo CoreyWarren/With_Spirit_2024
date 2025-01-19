@@ -256,7 +256,7 @@ public class missile1_script : MonoBehaviour
                 rb.rotation = finalAngle;
 
                 // Move forward
-                rb.velocity = transform.up * speed;
+                rb.linearVelocity = transform.up * speed;
                 return;
             }
         }
@@ -269,7 +269,7 @@ public class missile1_script : MonoBehaviour
         float noTargetWobble = GetWobbleAngle() * wobbleRotateSpeed * Time.fixedDeltaTime;
         rb.rotation += noTargetWobble;
 
-        rb.velocity = transform.up * speed;
+        rb.linearVelocity = transform.up * speed;
     }
 
     // --- Wobble helper ---

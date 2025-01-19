@@ -20,7 +20,7 @@ public class laser1_script : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = gameObject.GetComponent<Rigidbody2D>();
-		rb.velocity = new Vector2(0, -laserspeed);
+		rb.linearVelocity = new Vector2(0, -laserspeed);
 		laserspeedinit = laserspeed;
         as1 = GetComponent<AudioSource>();
         srr = GetComponent<SpriteRenderer>();
@@ -32,7 +32,7 @@ public class laser1_script : MonoBehaviour {
 		if (laserspeed < laserspeedinit*3)
 		{
 			laserspeed += .3f;
-			rb.velocity = new Vector2(0, -laserspeed);
+			rb.linearVelocity = new Vector2(0, -laserspeed);
 		}
 
 

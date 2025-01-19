@@ -16,7 +16,7 @@ public class restoreStone : MonoBehaviour {
 		instancePos = gameObject.transform.position;
 		if(instancePos.y < -30){
 			gameObject.transform.position = pos;
-			GetComponent<Rigidbody2D>().velocity = Vector3.zero;
+			GetComponent<Rigidbody2D>().linearVelocity = Vector3.zero;
 		}
 	}
 }

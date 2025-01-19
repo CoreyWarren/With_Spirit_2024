@@ -144,10 +144,10 @@ public class RoyalGuardEnemy1 : MonoBehaviour
                     timer1 = timer1Max;
 
                     if (playerTransform.position.x > transform.position.x)
-                    { rb1.velocity = new Vector2(jumpLength, jumpHeight); }
+                    { rb1.linearVelocity = new Vector2(jumpLength, jumpHeight); }
 
                     if (playerTransform.position.x < transform.position.x)
-                    { rb1.velocity = new Vector2(-jumpLength, jumpHeight); }
+                    { rb1.linearVelocity = new Vector2(-jumpLength, jumpHeight); }
                 }
 
 
@@ -155,17 +155,17 @@ public class RoyalGuardEnemy1 : MonoBehaviour
                 {
 
                     if (playerTransform.position.x > transform.position.x && !wallCheckRight)
-                    { rb1.velocity = new Vector2(rb1.velocity.x + moveSpeed, rb1.velocity.y); }
+                    { rb1.linearVelocity = new Vector2(rb1.linearVelocity.x + moveSpeed, rb1.linearVelocity.y); }
 
                     if (playerTransform.position.x < transform.position.x && !wallCheckLeft)
-                    { rb1.velocity = new Vector2(rb1.velocity.x - moveSpeed, rb1.velocity.y); }
+                    { rb1.linearVelocity = new Vector2(rb1.linearVelocity.x - moveSpeed, rb1.linearVelocity.y); }
 
                     //Facing direction left or right
-                    if(rb1.velocity.x < 0 && playerTransform.position.x < transform.position.x)
+                    if(rb1.linearVelocity.x < 0 && playerTransform.position.x < transform.position.x)
                     {
                         transform.localScale = new Vector2(1f, transform.localScale.y);
                     }else
-                    if(rb1.velocity.x > 0 && playerTransform.position.x > transform.position.x)
+                    if(rb1.linearVelocity.x > 0 && playerTransform.position.x > transform.position.x)
                     {
                         transform.localScale = new Vector2(-1f, transform.localScale.y);
                     }
@@ -269,11 +269,11 @@ public class RoyalGuardEnemy1 : MonoBehaviour
                         as1.PlayOneShot(damagedSound, damagedSoundVolume);
                         if (playerTransform.position.x < transform.position.x)
                         {
-                            rb1.velocity = new Vector2(hitRecoilX, hitRecoilY);
+                            rb1.linearVelocity = new Vector2(hitRecoilX, hitRecoilY);
                         }
                         else
                         {
-                            rb1.velocity = new Vector2(-hitRecoilX, hitRecoilY);
+                            rb1.linearVelocity = new Vector2(-hitRecoilX, hitRecoilY);
                         }
                     }
                 }
@@ -288,12 +288,12 @@ public class RoyalGuardEnemy1 : MonoBehaviour
             
             
             //Check-ins
-            if(rb1.velocity.x > maxHorizontalSpeed)
+            if(rb1.linearVelocity.x > maxHorizontalSpeed)
             {
-                rb1.velocity = new Vector2(rb1.velocity.x - (rb1.velocity.x - maxHorizontalSpeed)/2, rb1.velocity.y);
-            }else if (rb1.velocity.x < -maxHorizontalSpeed)
+                rb1.linearVelocity = new Vector2(rb1.linearVelocity.x - (rb1.linearVelocity.x - maxHorizontalSpeed)/2, rb1.linearVelocity.y);
+            }else if (rb1.linearVelocity.x < -maxHorizontalSpeed)
             {
-                rb1.velocity = new Vector2(rb1.velocity.x + (-maxHorizontalSpeed - rb1.velocity.x) / 2, rb1.velocity.y);
+                rb1.linearVelocity = new Vector2(rb1.linearVelocity.x + (-maxHorizontalSpeed - rb1.linearVelocity.x) / 2, rb1.linearVelocity.y);
             }
 
             
@@ -305,7 +305,7 @@ public class RoyalGuardEnemy1 : MonoBehaviour
                 as1.pitch -= 0.3f;
                 deathPosition = transform.position;
                 GetComponent<Collider2D>().enabled = false;
-                rb1.velocity = new Vector3(0f, 0f, 0f);
+                rb1.linearVelocity = new Vector3(0f, 0f, 0f);
             }
 
             if (myDeath)

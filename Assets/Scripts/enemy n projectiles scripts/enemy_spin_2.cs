@@ -55,7 +55,7 @@ public class enemy_spin_2 : MonoBehaviour {
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
-        rb.velocity = new Vector2(xspeed, 0f);
+        rb.linearVelocity = new Vector2(xspeed, 0f);
         player = GameObject.FindWithTag("Player").transform;
         lasertimer = 0;
         health = healthMax;
@@ -81,7 +81,7 @@ public class enemy_spin_2 : MonoBehaviour {
 
             if (dying)
             {
-                rb.velocity = new Vector2(0f, 0f);
+                rb.linearVelocity = new Vector2(0f, 0f);
                 if (deathTimer == deathTime)
                 {
                     Destroy(gameObject.GetComponent<Rigidbody>());
@@ -141,29 +141,29 @@ public class enemy_spin_2 : MonoBehaviour {
 
                 if (righttouching)
                 {
-                    rb.velocity = new Vector2(-xspeed, 0f);
+                    rb.linearVelocity = new Vector2(-xspeed, 0f);
                     goingright = false;
                 }
 
                 if (lefttouching)
                 {
-                    rb.velocity = new Vector2(xspeed, 0f);
+                    rb.linearVelocity = new Vector2(xspeed, 0f);
                     goingright = true;
                 }
 
-                if (goingright && rb.velocity.x < xspeed)
+                if (goingright && rb.linearVelocity.x < xspeed)
                 {
-                    rb.velocity = new Vector2(xspeed, 0f);
+                    rb.linearVelocity = new Vector2(xspeed, 0f);
                 }
-                if (!goingright && rb.velocity.x > -xspeed)
+                if (!goingright && rb.linearVelocity.x > -xspeed)
                 {
-                    rb.velocity = new Vector2(-xspeed, 0f);
+                    rb.linearVelocity = new Vector2(-xspeed, 0f);
                 }
 
                 //Damage and Invincibility
                 if (invincibilityTimer > 0)
                 {
-                    rb.velocity = new Vector2(0f, 0f);
+                    rb.linearVelocity = new Vector2(0f, 0f);
                     invincibilityTimer--;
                     if (invincibilityTimer % 2 == 0)
                     {
