@@ -144,10 +144,14 @@ public class missile1_script : MonoBehaviour
         GameObject[] gos = GameObject.FindGameObjectsWithTag("Enemy");
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
+        position.z = 0; // Ignore the z-coordinate of the current object
+        GameObject closest = null;
+
         foreach (GameObject go in gos)
         {
             Vector3 diff = go.transform.position - position;
-            float curDistance = diff.sqrMagnitude;
+            diff.z = 0; // Ignore the z-coordinate of the enemy object
+            float curDistance = diff.sqrMagnitude; // Calculate 2D squared distance
             if (curDistance < distance)
             {
                 closest = go;
